@@ -10,7 +10,7 @@ public interface Borrowable {
 	     * @param user The user attempting to borrow the item.
 	     * @throws Exception If the item cannot be borrowed.
 	     */
-	    void borrowItem(User user) throws Exception;
+	    void borrowItem(LibraryItem libraryItem, User user) throws Exception;
 
 	    /**
 	     * Allows a user to return the borrowed item.
@@ -18,7 +18,7 @@ public interface Borrowable {
 	     * @param user The user returning the item.
 	     * @throws Exception If the item cannot be returned.
 	     */
-	    void returnItem(User user) throws Exception;
+	    void returnItem(LibraryItem libraryItem, User user) throws Exception;
 
 	    /**
 	     * Checks if the item is available for borrowing.

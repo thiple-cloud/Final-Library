@@ -2,6 +2,8 @@ package CodeTest;
 
 import java.time.LocalDate;
 
+import observer.eventManager;
+
 /**
  * Represents a book in the library.
  * Extends the LibraryItem class and implements the Borrowable interface.
@@ -10,6 +12,7 @@ public class Book extends LibraryItem implements Borrowable {
 
     /** The ISBN number of the book. */
     private String ISBN;
+    private eventManager events;
 
     /**
      * Constructs a new Book with the specified title, author, publication year, and
@@ -23,6 +26,7 @@ public class Book extends LibraryItem implements Borrowable {
     public Book(String title, String author, int publicationYear, int ageRating, String ISBN) {
         super(title, author, publicationYear, ageRating);
         this.ISBN = ISBN;
+        events = new eventManager();
     }
 
     /**
@@ -43,7 +47,7 @@ public class Book extends LibraryItem implements Borrowable {
      *                   borrowed.
      */
     @Override
-    public void borrowItem(User user) throws Exception {
+    public void borrowItem(LibraryItem libraryItem, User user) throws Exception {
         if (!user.canBorrow()) {
             throw new Exception(user.getName() + " does not have permission to borrow items.");
         }
@@ -52,6 +56,7 @@ public class Book extends LibraryItem implements Borrowable {
             dueDate = LocalDate.now().plusDays(14); // Books are due in 14 days
             System.out.println(getTitle() + " has been borrowed by " + user.getName() + ". Due on " + dueDate);
         } else {
+            events.subscribe(libraryItem, user);
             throw new Exception(getTitle() + " is already borrowed.");
         }
     }
@@ -63,13 +68,15 @@ public class Book extends LibraryItem implements Borrowable {
      * @throws Exception If the book was not borrowed.
      */
     @Override
-    public void returnItem(User user) throws Exception {
+    public void returnItem(LibraryItem libraryItem, User user) throws Exception {
         if (!isBorrowed) {
             throw new Exception(getTitle() + " was not borrowed.");
         }
         isBorrowed = false;
         dueDate = null;
         System.out.println(getTitle() + " has been returned by " + user.getName() + ".");
+        events.unsubscribe(libraryItem, user);
+        events.update(libraryItem);
     }
 
     /**

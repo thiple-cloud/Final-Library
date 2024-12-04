@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import CompositePattern.TaskContext;
 import CompositePattern.UserRole;
+import creational.LibraryFactory;
 import strategyPattern.CompositeSearchStrategy;
 import strategyPattern.PartialSearchStrategy;
 import strategyPattern.SearchByAge;
@@ -75,18 +76,23 @@ public class LibraryManagementSystem {
      */
     private static void initializeLibraryItems(Library library) { //Book Factory 
         // Create books
-        Book book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", 1925, 12, "1234567890");
-        Book book2 = new Book("1984", "George Orwell", 1949, 17, "0987654321");
+        LibraryFactory factory = new LibraryFactory();
+        Book HarryPotter = factory.createBook("Harry Potter", "JK Rowling", 2001, 10, "558844");
+        HarryPotter.getDetails();
+        Book HungerGames = factory.createBook("The Hunger Games", "Suzanne Collins", 2008, 10, "894521");
+        HungerGames.getDetails();
 
         // Create magazines
-        Magazine magazine1 = new Magazine("Time", "Henry Luce", 5, 2021, 15);
-        Magazine magazine2 = new Magazine("National Geographic", "Various", 2022, 9, 101);
+        Magazine shopping = factory.createMagazine("Runway", "Miranda Priestly", 2024, 10, 1);
+        shopping.getDetails();
+        Magazine cooking = factory.createMagazine("Best Home Meals", "Martha Stewart", 2024, 0, 1);
+        cooking.getDetails();
 
         // Add items to the library
-        library.addItem(book1);
-        library.addItem(book2);
-        library.addItem(magazine1);
-        library.addItem(magazine2);
+        library.addItem(HarryPotter);
+        library.addItem(HungerGames);
+        library.addItem(shopping);
+        library.addItem(cooking);
 
         //@Stanleygs append the library with the legacy collection
         String filePath = "src\\AdaptivePattern\\LegacyCollection.csv";
@@ -96,8 +102,6 @@ public class LibraryManagementSystem {
         System.out.println(item.getTitle());
     }
 
-    
-    
     private static Map<String, UserRole> initializeRolesAndPermissions() {
         Map<String, UserRole> roles = new HashMap<>();
 
@@ -359,7 +363,7 @@ public class LibraryManagementSystem {
         
         if (!result.isEmpty()) {
         	LibraryItem itemToBorrow = result.get(0);
-            ItemReserver.reserveItem(itemToBorrow, currentUser); //@lavanna add observer method
+            ItemReserver.reserveItem(itemToBorrow, currentUser); 
         } else {
             System.out.println("Item not found.");
         }
@@ -382,7 +386,7 @@ public class LibraryManagementSystem {
         
         if (!result.isEmpty()) {
         	LibraryItem itemToReturn = result.get(0);
-            ItemReserver.returnItem(itemToReturn, currentUser); //@lavanna add observer pattern
+            ItemReserver.returnItem(itemToReturn, currentUser); 
         } else {
             System.out.println("Item not found.");
         }
@@ -394,7 +398,8 @@ public class LibraryManagementSystem {
      * @param scanner Scanner for user input.
      * @param library The library instance.
      */
-    private static void addItem(Scanner scanner, Library library) { //@lavanna add book/magazine factory
+    private static void addItem(Scanner scanner, Library library) { 
+        LibraryFactory factory = new LibraryFactory(); //create new library item using the factory
         System.out.print("Enter the type of item to add (book/magazine): ");
         String itemType = scanner.nextLine().toLowerCase();
         System.out.print("Enter the title: ");
@@ -428,8 +433,9 @@ public class LibraryManagementSystem {
         if ("book".equals(itemType)) {
             System.out.print("Enter the ISBN: ");
             String isbn = scanner.nextLine();
-            Book newBook = new Book(title, author, year, ageRating, isbn);
+            Book newBook = factory.createBook(title, author, year, ageRating, isbn); //new book factory
             library.addItem(newBook);
+
         } else if ("magazine".equals(itemType)) {
             int issueNumber;
             try {
@@ -441,7 +447,7 @@ public class LibraryManagementSystem {
                 scanner.nextLine(); // Consume invalid input
                 return;
             }
-            Magazine newMagazine = new Magazine(title, author, year, ageRating, issueNumber);
+            Magazine newMagazine = factory.createMagazine(title, author, year, ageRating, issueNumber);//new magazine factory
             library.addItem(newMagazine);
         } else {
             System.out.println("Invalid item type.");

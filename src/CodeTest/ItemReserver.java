@@ -12,7 +12,7 @@ public class ItemReserver {
         if (item instanceof Borrowable) {
             Borrowable borrowableItem = (Borrowable) item;
             try {
-                borrowableItem.borrowItem(user);
+                borrowableItem.borrowItem(item, user);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -31,7 +31,7 @@ public class ItemReserver {
         if (item instanceof Borrowable) {
             Borrowable borrowableItem = (Borrowable) item;
             try {
-                borrowableItem.returnItem(user);
+                borrowableItem.returnItem(item, user);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }

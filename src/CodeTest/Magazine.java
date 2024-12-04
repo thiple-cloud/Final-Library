@@ -2,6 +2,8 @@ package CodeTest;
 
 import java.time.LocalDate;
 
+import observer.eventManager;
+
 /**
  * Represents a magazine in the library.
  * Extends the LibraryItem class and implements the Borrowable interface.
@@ -10,6 +12,7 @@ public class Magazine extends LibraryItem implements Borrowable {
 
     /** The issue number of the magazine. */
     private int issueNumber;
+    private eventManager events;
 
     /**
      * Constructs a new Magazine with the specified title, author, publication year,
@@ -23,6 +26,7 @@ public class Magazine extends LibraryItem implements Borrowable {
     public Magazine(String title, String author, int publicationYear, int ageRating, int issueNumber) {
         super(title, author, publicationYear, ageRating);
         this.issueNumber = issueNumber;
+        events = new eventManager();
     }
 
     /**
@@ -43,7 +47,7 @@ public class Magazine extends LibraryItem implements Borrowable {
      *                   borrowed.
      */
     @Override
-    public void borrowItem(User user) throws Exception {
+    public void borrowItem(LibraryItem libraryItem, User user) throws Exception {
         if (!user.canBorrow()) {
             throw new Exception(user.getName() + " does not have permission to borrow items.");
         }
@@ -53,6 +57,7 @@ public class Magazine extends LibraryItem implements Borrowable {
             System.out.println(getTitle() + " (Magazine) has been borrowed by " + user.getName() +
                     ". Due on " + dueDate);
         } else {
+            events.subscribe(libraryItem, user);
             throw new Exception(getTitle() + " is already borrowed.");
         }
     }
@@ -64,13 +69,15 @@ public class Magazine extends LibraryItem implements Borrowable {
      * @throws Exception If the magazine was not borrowed.
      */
     @Override
-    public void returnItem(User user) throws Exception {
+    public void returnItem(LibraryItem libraryItem, User user) throws Exception {
         if (!isBorrowed) {
             throw new Exception(getTitle() + " was not borrowed.");
         }
         isBorrowed = false;
         dueDate = null;
         System.out.println(getTitle() + " (Magazine) has been returned by " + user.getName() + ".");
+        events.unsubscribe(libraryItem, user);
+        events.update(libraryItem);
     }
 
     /**
