@@ -101,6 +101,6 @@ public class User {
         return manager;
     }
     public void notify(LibraryItem a){ //method to notify the user on a waitlist for an item that the item is available to reserve
-		System.out.println("The library item " + a.toString() + "is now available to rent.");
+		System.out.println("The library item " + a.getDetails() + "is now available to rent.");
 	}
 }
