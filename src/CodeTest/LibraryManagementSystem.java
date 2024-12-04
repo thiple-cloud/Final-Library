@@ -1,5 +1,7 @@
 package CodeTest;
 
+import CompositePattern.TaskContext;
+import CompositePattern.UserRole;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -8,7 +10,6 @@ import java.util.Scanner;
 
 import CompositePattern.TaskContext;
 import CompositePattern.UserRole;
-import creational.LibraryFactory;
 import strategyPattern.CompositeSearchStrategy;
 import strategyPattern.PartialSearchStrategy;
 import strategyPattern.SearchByAge;
@@ -37,7 +38,7 @@ public class LibraryManagementSystem {
      */
     public static void main(String[] args) {
         // Initialize the library
-        Library library = new Library();
+        SingletonLibraryDC library = SingletonLibraryDC.getInstance(); //Library library = new Library();
 
         // Initialize library items
         initializeLibraryItems(library);
@@ -74,7 +75,7 @@ public class LibraryManagementSystem {
      *
      * @param library The library to add items to.
      */
-    private static void initializeLibraryItems(Library library) { //Book Factory 
+    private static void initializeLibraryItems(SingletonLibraryDC library) { //Book Factory 
         // Create books
         LibraryFactory factory = new LibraryFactory();
         Book HarryPotter = factory.createBook("Harry Potter", "JK Rowling", 2001, 10, "558844");
@@ -167,7 +168,7 @@ public class LibraryManagementSystem {
      * @param library     The library instance.
      * @param currentUser The logged-in user.
      */
-    private static void mainMenuLoop(Scanner scanner, Library library, User currentUser, Map<String, UserRole> roles) {
+    private static void mainMenuLoop(Scanner scanner, SingletonLibraryDC library, User currentUser, Map<String, UserRole> roles) {
         boolean quit = false;
 
         while (!quit) {
@@ -215,7 +216,7 @@ public class LibraryManagementSystem {
      * @param currentUser The logged-in user.
      * @return True if the user chooses to quit; false otherwise.
      */
-    private static boolean processMenuOption(int option, Scanner scanner, Library library, User currentUser, Map<String, UserRole> roles) {
+    private static boolean processMenuOption(int option, Scanner scanner, SingletonLibraryDC library, User currentUser, Map<String, UserRole> roles) {
     	UserRole role = currentUser.getRole();
         switch (option) {
             case 1:
@@ -249,7 +250,7 @@ public class LibraryManagementSystem {
         return false;
     }
 
-    private static void runTask(String task, Scanner scanner, Library library, User currentUser, UserRole role) {
+    private static void runTask(String task, Scanner scanner, SingletonLibraryDC library, User currentUser, UserRole role) {
     	TaskContext context = new TaskContext(currentUser);
 
         if (role.hasPermission(task)) {
@@ -281,7 +282,7 @@ public class LibraryManagementSystem {
         }
     }
     
-    private static void runSearchStrategy(Scanner scanner, Library library) {
+    private static void runSearchStrategy(Scanner scanner, SingletonLibraryDC library) {
        	SearchContext context = new SearchContext();//no strategy currently
        	
     	System.out.println("\nYour search methods");
@@ -353,7 +354,7 @@ public class LibraryManagementSystem {
      * @param library     The library instance.
      * @param currentUser The logged-in user.
      */
-    private static void borrowItem(Scanner scanner, Library library, User currentUser) {
+    private static void borrowItem(Scanner scanner, SingletonLibraryDC library, User currentUser) {
     	System.out.print("Enter the title of the item to borrow: ");
         String borrowTitle = scanner.nextLine();
         
@@ -376,7 +377,7 @@ public class LibraryManagementSystem {
      * @param library     The library instance.
      * @param currentUser The logged-in user.
      */
-    private static void returnItem(Scanner scanner, Library library, User currentUser) {
+    private static void returnItem(Scanner scanner, SingletonLibraryDC library, User currentUser) {
     	System.out.print("Enter the title of the item to return: ");
         String returnTitle = scanner.nextLine();
         
@@ -398,8 +399,7 @@ public class LibraryManagementSystem {
      * @param scanner Scanner for user input.
      * @param library The library instance.
      */
-    private static void addItem(Scanner scanner, Library library) { 
-        LibraryFactory factory = new LibraryFactory(); //create new library item using the factory
+    private static void addItem(Scanner scanner, Library library) { //@lavanna add book/magazine factory
         System.out.print("Enter the type of item to add (book/magazine): ");
         String itemType = scanner.nextLine().toLowerCase();
         System.out.print("Enter the title: ");
@@ -460,7 +460,7 @@ public class LibraryManagementSystem {
      * @param scanner Scanner for user input.
      * @param library The library instance.
      */
-    private static void removeItem(Scanner scanner, Library library) { 
+    private static void removeItem(Scanner scanner, SingletonLibraryDC library) { 
         System.out.print("Enter the title of the item to remove: ");
         String removeTitle = scanner.nextLine();
         
