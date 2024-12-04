@@ -20,7 +20,7 @@ import strategyPattern.SearchContext;
 
 import AdaptivePattern.csvReader;
 import AdaptivePattern.LegacyLibraryAdapter;
-import AptivePattern.AdaptiveDemoTool;
+import AdaptivePattern.AdaptiveDemoTool;
 
 
 
