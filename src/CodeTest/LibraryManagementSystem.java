@@ -2,6 +2,9 @@ package CodeTest;
 
 import CompositePattern.TaskContext;
 import CompositePattern.UserRole;
+import creational.LibraryFactory;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -95,12 +98,24 @@ public class LibraryManagementSystem {
         library.addItem(shopping);
         library.addItem(cooking);
 
-        //@Stanleygs append the library with the legacy collection
-        String filePath = "src\\AdaptivePattern\\LegacyCollection.csv";
 
-        library = AdaptiveDemoTool.appendLegacyItems(library, filePath);
-        System.out.println("Library Items after adapting the legacy data:");
-        System.out.println(item.getTitle());
+       String filePath = "src/AdaptivePattern/LegacyCollection.csv";
+        List<String[]> csvData = csvReader.readCSV(filePath);
+ 
+        // Convert csvData to List<String> before passing to adaptLegacyData
+        List<String> legacyData = new ArrayList<>();
+        for (String[] row : csvData) {
+            legacyData.add(String.join(",", row));  // Join the row into a single string
+        }
+ 
+        // Use the adapter to convert legacy data into LibraryItems
+        LegacyLibraryAdapter adapter = new LegacyLibraryAdapter();
+        List<LibraryItem> legacyItems = adapter.adaptLegacyData(legacyData);
+ 
+        // Add each item to the library
+        for (LibraryItem item : legacyItems) {
+            library.addItem(item);  // Add each item to the library
+        }
     }
 
     private static Map<String, UserRole> initializeRolesAndPermissions() {
@@ -136,9 +151,9 @@ public class LibraryManagementSystem {
      */
     private static Map<String, User> initializeUsers(Map<String, UserRole> roles) {
         Map<String, User> users = new HashMap<>();
-        users.put("alice", new User("Alice", roles.get("member")));
-        users.put("wendy", new User("Wendy", roles.get("librarian")));
-        users.put("olivia", new User("Olivia", roles.get("admin")));
+        users.put("member", new User("member", roles.get("member")));
+        users.put("librarian", new User("librarian", roles.get("librarian")));
+        users.put("admin", new User("admin", roles.get("admin")));
         return users;
     }
 
@@ -399,7 +414,8 @@ public class LibraryManagementSystem {
      * @param scanner Scanner for user input.
      * @param library The library instance.
      */
-    private static void addItem(Scanner scanner, Library library) { //@lavanna add book/magazine factory
+    private static void addItem(Scanner scanner, SingletonLibraryDC library) { //@lavanna add book/magazine factory
+        LibraryFactory factory = new LibraryFactory();
         System.out.print("Enter the type of item to add (book/magazine): ");
         String itemType = scanner.nextLine().toLowerCase();
         System.out.print("Enter the title: ");

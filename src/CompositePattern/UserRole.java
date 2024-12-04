@@ -11,6 +11,10 @@ public class UserRole implements LibraryRole{
 		this.name = name;
 	}
 
+	public String getName(){
+		return this.name;
+	}
+
 	@Override
 	public boolean hasPermission(String task) {
 		return permissionList.stream().anyMatch(permission -> permission.getTask().equalsIgnoreCase(task));

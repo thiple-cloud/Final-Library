@@ -44,11 +44,17 @@ public class eventManager {
      * @param user The user to be removed from the subscription list.
      */
     public void unsubscribe(LibraryItem a, User b){
+       try {
         subscribers.get(a).remove(b); //remove the user from the waitlist for the item
         System.out.print("The user ");
         System.out.print(b.getName());
         System.out.print(" was removed from the waitlist for item ");
-        System.out.println(a.getTitle());
+        System.out.println(a.getTitle());  
+       } catch (Exception e) {
+        System.out.println("There is no one on the waitlist.");
+       }
+       
+        
     }
 
     /**
@@ -57,9 +63,14 @@ public class eventManager {
      * @param item The library item that is now available.
      */
    public void update (LibraryItem a){
-   queue = subscribers.get(a); //create a variable to store the waitlist for the specific item
-   queueUser = queue.get(0); //get the first user in the waitlist for the item
-   queueUser.notify(a); //notify the user that the item is available to reserve
+    try {
+    queue = subscribers.get(a); //create a variable to store the waitlist for the specific item
+     queueUser = queue.get(0); //get the first user in the waitlist for the item
+    queueUser.notify(a); //notify the user that the item is available to reserve
    //unsubscribe(a, queueUser); //unsubscribe the user from the waitlist for the item
+    } catch (Exception e) {
+       System.out.println("No users to notify.");
+    }
+   
    }
 }

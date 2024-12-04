@@ -40,25 +40,52 @@ public class SingletonLibraryDC {
 //      * 
 //      * @param item LibraryItem to add
 //      */
-//     public void addItem(LibraryItem item) {
-//         items.add(item);
-//     }
+     public void addItem(LibraryItem item) {
+        items.add(item);
+    }
 
 //     /**
 //      * Removes a LibraryItem from the library's collection.
 //      * 
 //      * @param item LibraryItem to remove
 //      */
-//     public void removeItem(LibraryItem item) {
-//         items.remove(item);
-//     }
+     public void removeItem(LibraryItem item) {
+         items.remove(item);
+     }
 
 //     /**
 //      * Retrieves the list of all LibraryItems in the library.
 //      * 
 //      * @return List of LibraryItem
 //      */
-//     public List<LibraryItem> getItems() {
-//         return items;
-//     }
+     public List<LibraryItem> getItems() {
+         return items;
+     }
+
+     
+    /**
+     * Lists all items currently in the library.
+     */
+    public void listAllItems() {
+        System.out.println("Library items:");
+        for (LibraryItem item : items) {
+            System.out.println(item.getDetails());
+        }
+    }
+
+    /**
+     * Lists all borrowable items and their availability status.
+     */
+    public void listBorrowableItems() {
+        System.out.println("Borrowable items:");
+        for (LibraryItem item : items) {
+            if (item instanceof Borrowable) {
+                Borrowable borrowableItem = (Borrowable) item;
+                System.out.println(item.getDetails() + (borrowableItem.isAvailable()
+                        ? " - Available"
+                        : " - Borrowed, Due on " + borrowableItem.getDueDate()));
+            }
+        }
+    }
+
 }

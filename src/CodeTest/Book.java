@@ -48,11 +48,12 @@ public class Book extends LibraryItem implements Borrowable {
      */
     @Override
     public void borrowItem(LibraryItem libraryItem, User user) throws Exception {
-        if (!user.canBorrow()) {
+        if (!user.canBorrow(user)) {
             throw new Exception(user.getName() + " does not have permission to borrow items.");
         }
         if (!isBorrowed) {
             isBorrowed = true;
+            libraryItem.isBorrowed = true;
             dueDate = LocalDate.now().plusDays(14); // Books are due in 14 days
             System.out.println(getTitle() + " has been borrowed by " + user.getName() + ". Due on " + dueDate);
         } else {
@@ -73,6 +74,7 @@ public class Book extends LibraryItem implements Borrowable {
             throw new Exception(getTitle() + " was not borrowed.");
         }
         isBorrowed = false;
+        libraryItem.isBorrowed = false;
         dueDate = null;
         System.out.println(getTitle() + " has been returned by " + user.getName() + ".");
         events.unsubscribe(libraryItem, user);

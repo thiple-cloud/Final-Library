@@ -48,7 +48,7 @@ public class Magazine extends LibraryItem implements Borrowable {
      */
     @Override
     public void borrowItem(LibraryItem libraryItem, User user) throws Exception {
-        if (!user.canBorrow()) {
+        if (!user.canBorrow(user)) {
             throw new Exception(user.getName() + " does not have permission to borrow items.");
         }
         if (!isBorrowed) {

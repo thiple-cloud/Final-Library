@@ -80,8 +80,12 @@ public class User {
      *
      * @return True if the user can borrow; false otherwise.
      */
-    public boolean canBorrow() {
-        return isMember() || isLibrarian();
+    public boolean canBorrow(User user) {
+        boolean borrower = true;
+        if(user.role.getName().equalsIgnoreCase("admin")){
+            borrower = false;
+        }
+        return borrower;
     }
 
     /**
