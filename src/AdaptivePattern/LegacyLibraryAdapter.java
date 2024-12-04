@@ -8,85 +8,96 @@ import CodeTest.Magazine;
 
 
 public class LegacyLibraryAdapter {
-
     /**
      * Adapts a legacy collection of strings to a list of LibraryItem objects.
      * Each string in the legacy collection represents an item in the format:
-     * "Type,Title,Author,Year,Publication Date"
+     * "Type,Title,Author,Year,Publication Date", where:
+     * - Type is either "Book" or "Magazine"
+     * - Title is the title of the item
+     * - Author is the author or creator of the item
+     * - Year is the publication year (or "YYYY-MM" format)
+     * - Publication Date (for magazines) may include the issue number in some cases.
+     * 
+     * <p>This method parses the provided data and creates corresponding LibraryItem objects.
+     * For Books, an ISBN is generated, and for Magazines, the issue number is extracted 
+     * from the publication date (if available). Invalid or incomplete data are logged and 
+     * skipped.</p>
      *
-     * @param legacyData A collection of strings representing legacy library data.
-     * @return A list of LibraryItem objects.
+     * @param legacyData A collection of strings, each representing legacy library data in the format mentioned above.
+     * @return A list of LibraryItem objects created from the legacy data.
      */
     public List<LibraryItem> adaptLegacyData(Collection<String> legacyData) {
         Map<String, LibraryItem> libraryItemsMap = new HashMap<>();
-        Map<String, String> unknownItemsMap = new HashMap<>(); // To store unknown items as strings
-        int bookCount = 1;
-        int magazineCount = 1;
-        int unknownCount = 1;
-
+        int bookCount = 1, magazineCount = 1;
+    
         for (String data : legacyData) {
             try {
-                // Split the legacy data string by commas
                 String[] values = data.split(",");
-
-                // Ensure the data has at least 4 columns (Type, Title, Author, Year)
-                if (values.length < 5) {
-                    System.out.println("Skipping invalid data: " + data);
+                if (values.length < 4) {
+                    System.out.println("Skipping invalid data (not enough fields): " + data);
                     continue;
                 }
-
-                // Parse the data
+    
                 String typeStr = values[0].trim();
                 String title = values[1].trim();
                 String author = values[2].trim();
-                String yearStr = values[3].trim(); // Changed to String to handle year-month formats
-                String years = values[4].trim(); //publication year added
-
-                // Additional fields for Book and Magazine
-                String isbn = UUID.randomUUID().toString(); // Generate a unique ISBN
-                boolean isPhysical = true; // Default to physical for simplicity
-                int ageRating = 0; // Default age rating
-                String genre = "Unknown"; // Default genre
-                int publicationYear = Integer.parseInt(years);
-                // Validate and handle the year parsing
-                int year = -1; // Default to -1 if year is not valid
+                String yearStr = values[3].trim();
+    
+                // Validate year
+                int year = -1;
                 try {
                     if (yearStr.contains("-")) {
-                        // If the year is in the "YYYY-MM" format, just extract the year part
-                        year = Integer.parseInt(yearStr.split("-")[0]);
+                        year = Integer.parseInt(yearStr.split("-")[0]); // Extract the year from "YYYY-MM"
                     } else {
-                        // Otherwise, parse it as a regular year
                         year = Integer.parseInt(yearStr);
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid year format for data: " + data);
-                    continue; // Skip this record if year parsing fails
+                    continue;
                 }
-
-                LibraryItem item;
-
-                if (typeStr.equalsIgnoreCase("BOOK")) {
-                    // Creating a Book item with provided details
-                    item = new Book(title, author, publicationYear, ageRating, ISBN);
+    
+                LibraryItem item = null;
+    
+                if (typeStr.equalsIgnoreCase("Book")) {
+                    // Books don't require the fifth column
+                    String isbn = UUID.randomUUID().toString();
+                    item = new Book(title, author, year, 0, isbn); // Default ageRating = 0
                     libraryItemsMap.put("LegBook" + bookCount++, item);
-                } else if (typeStr.equalsIgnoreCase("MAGAZINE")) {
-                    // Creating a Magazine item with default values for missing fields
-                    item = new Magazine(isbn, title, year, author, isPhysical, ageRating, "General", "Unknown Publisher", 1);
-                    libraryItemsMap.put("LegMag" + magazineCount++, item);  // Corrected to LegMag
+    
+                } else if (typeStr.equalsIgnoreCase("Magazine")) {
+                    // Magazines require a fifth column for the issue number
+                    if (values.length < 5) {
+                        System.out.println("Skipping invalid magazine data (missing issue): " + data);
+                        continue;
+                    }
+    
+                    String issueStr = values[4].trim();
+                    int issueNumber = 1; // Default issue number
+                    try {
+                        String[] parts = issueStr.split("\\D+"); // Extract first number
+                        for (String part : parts) {
+                            if (!part.isEmpty()) {
+                                issueNumber = Integer.parseInt(part);
+                                break;
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid issue number format for data: " + data);
+                    }
+    
+                    item = new Magazine(title, author, year, 0, issueNumber);
+                    libraryItemsMap.put("LegMag" + magazineCount++, item);
+    
                 } else {
-                    String unknownData = "Unknown type: " + typeStr + ", Data: " + data;
-                    unknownItemsMap.put("LegUnknown" + unknownCount++, unknownData); // Store unknown data in
-                    System.out.println(unknownData);
-                    continue; // Skip unknown types
+                    // Skip unknown types
+                    System.out.println("Unknown type: " + data);
+                    continue;
                 }
-
             } catch (Exception e) {
-                System.out.println("Error processing data: " + data);
-                e.printStackTrace();
+                System.out.println("Error processing data: " + data + ". Exception: " + e.getMessage());
             }
         }
-
-        // Convert the Map to a List of LibraryItems (if returning a list)
+    
         return new ArrayList<>(libraryItemsMap.values());
     }
 }
