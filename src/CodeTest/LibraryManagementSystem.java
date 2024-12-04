@@ -17,6 +17,12 @@ import strategyPattern.SearchByPublicationYear;
 import strategyPattern.SearchByTitle;
 import strategyPattern.SearchContext;
 
+import AdaptivePattern.csvReader;
+import AdaptivePattern.LegacyLibraryAdapter;
+import AdaptiveDemoTool;
+
+
+
 /**
  * The main class for the Library Management System.
  * Handles user interactions and library operations.
@@ -83,6 +89,11 @@ public class LibraryManagementSystem {
         library.addItem(magazine2);
 
         //@Stanleygs append the library with the legacy collection
+        String filePath = "src\\AdaptivePattern\\LegacyCollection.csv";
+
+        library = AdaptiveDemoTool.appendLegacyItems(library, filePath);
+        System.out.println("Library Items after adapting the legacy data:");
+        System.out.println(item.getTitle());
     }
 
     
