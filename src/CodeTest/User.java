@@ -93,8 +93,12 @@ public class User {
      *
      * @return True if the user can manage items; false otherwise.
      */
-    public boolean canManageItems() {
-        return isLibrarian() || isAdmin();
+    public boolean canManageItems(User user) {
+        boolean manager = true;
+        if(user.role.getName().equalsIgnoreCase("member")){
+            manager = false;
+        }
+        return manager;
     }
     public void notify(LibraryItem a){ //method to notify the user on a waitlist for an item that the item is available to reserve
 		System.out.println("The library item " + a.toString() + "is now available to rent.");

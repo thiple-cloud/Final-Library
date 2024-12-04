@@ -24,7 +24,6 @@ import strategyPattern.SearchContext;
 
 import AdaptivePattern.csvReader;
 import AdaptivePattern.LegacyLibraryAdapter;
-import AdaptivePattern.AdaptiveDemoTool;
 
 
 
@@ -151,9 +150,9 @@ public class LibraryManagementSystem {
      */
     private static Map<String, User> initializeUsers(Map<String, UserRole> roles) {
         Map<String, User> users = new HashMap<>();
-        users.put("member", new User("member", roles.get("member")));
-        users.put("librarian", new User("librarian", roles.get("librarian")));
-        users.put("admin", new User("admin", roles.get("admin")));
+        users.put("alice", new User("Alice", roles.get("member")));
+        users.put("wendy", new User("Wendy", roles.get("librarian")));
+        users.put("olivia", new User("Olivia", roles.get("admin")));
         return users;
     }
 

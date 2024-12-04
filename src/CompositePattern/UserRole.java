@@ -19,6 +19,7 @@ public class UserRole implements LibraryRole{
 	public boolean hasPermission(String task) {
 		return permissionList.stream().anyMatch(permission -> permission.getTask().equalsIgnoreCase(task));
 	}
+	
 	@Override
 	public void runTask(String task, ActionContext context) {
 		if(hasPermission(task)) {
