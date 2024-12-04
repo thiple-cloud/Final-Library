@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import CompositePattern.TaskContext;
-import CompositePattern.UserRole;
 import strategyPattern.CompositeSearchStrategy;
 import strategyPattern.PartialSearchStrategy;
 import strategyPattern.SearchByAge;
