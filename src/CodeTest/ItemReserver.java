@@ -1,6 +1,6 @@
 package CodeTest;
 
-public class ItemReserver {
+public class ItemReserver { 
 
     /**
      * Attempts to reserve (borrow) an item for a user.

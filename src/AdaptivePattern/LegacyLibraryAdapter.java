@@ -1,9 +1,11 @@
 package AdaptivePattern;
 
 import java.util.*;
-import library.LibraryItem;
-import library.Book;
-import library.Magazine;
+
+import CodeTest.Book;
+import CodeTest.LibraryItem;
+import CodeTest.Magazine;
+
 
 public class LegacyLibraryAdapter {
 
@@ -28,7 +30,7 @@ public class LegacyLibraryAdapter {
                 String[] values = data.split(",");
 
                 // Ensure the data has at least 4 columns (Type, Title, Author, Year)
-                if (values.length < 4) {
+                if (values.length < 5) {
                     System.out.println("Skipping invalid data: " + data);
                     continue;
                 }
@@ -38,13 +40,14 @@ public class LegacyLibraryAdapter {
                 String title = values[1].trim();
                 String author = values[2].trim();
                 String yearStr = values[3].trim(); // Changed to String to handle year-month formats
+                String years = values[4].trim(); //publication year added
 
                 // Additional fields for Book and Magazine
                 String isbn = UUID.randomUUID().toString(); // Generate a unique ISBN
                 boolean isPhysical = true; // Default to physical for simplicity
                 int ageRating = 0; // Default age rating
                 String genre = "Unknown"; // Default genre
-
+                int publicationYear = Integer.parseInt(years);
                 // Validate and handle the year parsing
                 int year = -1; // Default to -1 if year is not valid
                 try {
@@ -64,7 +67,7 @@ public class LegacyLibraryAdapter {
 
                 if (typeStr.equalsIgnoreCase("BOOK")) {
                     // Creating a Book item with provided details
-                    item = new Book(isbn, title, year, author, genre, isPhysical, ageRating);
+                    item = new Book(title, author, publicationYear, ageRating, ISBN);
                     libraryItemsMap.put("LegBook" + bookCount++, item);
                 } else if (typeStr.equalsIgnoreCase("MAGAZINE")) {
                     // Creating a Magazine item with default values for missing fields

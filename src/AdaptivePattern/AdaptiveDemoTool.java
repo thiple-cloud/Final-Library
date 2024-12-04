@@ -2,7 +2,9 @@ package AdaptivePattern;
 
 import java.util.ArrayList;
 import java.util.List;
-import library.LibraryItem;
+
+import CodeTest.LibraryItem;
+
 
 
 public class AdaptiveDemoTool {
@@ -13,7 +15,7 @@ public class AdaptiveDemoTool {
      * @param filePath      The file path to the legacy CSV collection.
      * @return The combined list of LibraryItem objects (existing + adapted).
      */
-    public static List<LibraryItem> appendLegacyItems(List<LibraryItem> existingItems, String filePath) {
+    public static List<CodeTest.LibraryItem> appendLegacyItems(List<LibraryItem> existingItems, String filePath) {
         // Read the CSV file
         List<String[]> csvData = csvReader.readCSV(filePath);
 

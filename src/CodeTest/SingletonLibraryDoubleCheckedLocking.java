@@ -26,7 +26,7 @@ public class SingletonLibraryDoubleCheckedLocking {
      */
     public static SingletonLibraryDoubleCheckedLocking getInstance() {
         if (instance == null) { // First check (no locking)
-            synchronized (SingletonLibrary.class) {
+            synchronized (SingletonLibraryDoubleCheckedLocking.class) {
                 if (instance == null) { // Second check (with locking)
                     instance = new SingletonLibraryDoubleCheckedLocking();
                 }

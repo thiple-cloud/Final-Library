@@ -36,21 +36,24 @@ public class LibraryManagementSystem {
         initializeLibraryItems(library);
         
         Map<String, UserRole> userRoles = initializeRolesAndPermissions();
-
+        //@thiple-cloud add composite
         // Initialize users
         Map<String, User> users = initializeUsers(userRoles);
+         //@thiple-cloud add composite
 
         // Create a scanner for user input
         Scanner scanner = new Scanner(System.in);
 
         // User login
         User currentUser = userLogin(scanner, users);
-
+        //@Sellfunnel add singleton code here
         // If login failed, exit the program
         if (currentUser == null) {
             scanner.close();
             return;
         }
+         //@Sellfunnel add singleton code here
+
 
         // Main interaction loop
         mainMenuLoop(scanner, library, currentUser, userRoles);
@@ -64,7 +67,7 @@ public class LibraryManagementSystem {
      *
      * @param library The library to add items to.
      */
-    private static void initializeLibraryItems(Library library) {
+    private static void initializeLibraryItems(Library library) { //Book Factory 
         // Create books
         Book book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", 1925, 12, "1234567890");
         Book book2 = new Book("1984", "George Orwell", 1949, 17, "0987654321");
@@ -78,7 +81,11 @@ public class LibraryManagementSystem {
         library.addItem(book2);
         library.addItem(magazine1);
         library.addItem(magazine2);
+
+        //@Stanleygs append the library with the legacy collection
     }
+
+    
     
     private static Map<String, UserRole> initializeRolesAndPermissions() {
         Map<String, UserRole> roles = new HashMap<>();
@@ -341,7 +348,7 @@ public class LibraryManagementSystem {
         
         if (!result.isEmpty()) {
         	LibraryItem itemToBorrow = result.get(0);
-            ItemReserver.reserveItem(itemToBorrow, currentUser);
+            ItemReserver.reserveItem(itemToBorrow, currentUser); //@lavanna add observer method
         } else {
             System.out.println("Item not found.");
         }
@@ -364,7 +371,7 @@ public class LibraryManagementSystem {
         
         if (!result.isEmpty()) {
         	LibraryItem itemToReturn = result.get(0);
-            ItemReserver.returnItem(itemToReturn, currentUser);
+            ItemReserver.returnItem(itemToReturn, currentUser); //@lavanna add observer pattern
         } else {
             System.out.println("Item not found.");
         }
@@ -376,7 +383,7 @@ public class LibraryManagementSystem {
      * @param scanner Scanner for user input.
      * @param library The library instance.
      */
-    private static void addItem(Scanner scanner, Library library) {
+    private static void addItem(Scanner scanner, Library library) { //@lavanna add book/magazine factory
         System.out.print("Enter the type of item to add (book/magazine): ");
         String itemType = scanner.nextLine().toLowerCase();
         System.out.print("Enter the title: ");
@@ -436,7 +443,7 @@ public class LibraryManagementSystem {
      * @param scanner Scanner for user input.
      * @param library The library instance.
      */
-    private static void removeItem(Scanner scanner, Library library) {
+    private static void removeItem(Scanner scanner, Library library) { 
         System.out.print("Enter the title of the item to remove: ");
         String removeTitle = scanner.nextLine();
         
