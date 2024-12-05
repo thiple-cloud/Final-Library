@@ -1,8 +1,9 @@
 package CodeTest;
 
-import CompositePattern.TaskContext;
-import CompositePattern.UserRole;
-import creational.LibraryFactory;
+import CompositePattern.*;
+import strategyPattern.*;
+import AdaptivePattern.*;
+import creational.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,20 +11,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
-import strategyPattern.CompositeSearchStrategy;
-import strategyPattern.PartialSearchStrategy;
-import strategyPattern.SearchByAge;
-import strategyPattern.SearchByAuthor;
-import strategyPattern.SearchByISBN;
-import strategyPattern.SearchByPublicationYear;
-import strategyPattern.SearchByTitle;
-import strategyPattern.SearchContext;
-
-import AdaptivePattern.csvReader;
-import AdaptivePattern.LegacyLibraryAdapter;
-
-
 
 /**
  * The main class for the Library Management System.

@@ -1,6 +1,6 @@
 package creational;
-import CodeTest.Book;
-import CodeTest.Magazine;
+
+import CodeTest.*;
 
 /**
  * A factory class to create various library items such as books and magazines.

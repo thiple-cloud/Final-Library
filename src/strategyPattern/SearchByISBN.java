@@ -3,8 +3,7 @@ package strategyPattern;
 import java.util.ArrayList;
 import java.util.List;
 
-import CodeTest.Book;
-import CodeTest.LibraryItem;
+import CodeTest.*;
 
 public class SearchByISBN implements SearcherStrategy{
 	@Override

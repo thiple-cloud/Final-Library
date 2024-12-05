@@ -1,10 +1,7 @@
 package AdaptivePattern;
 
 import java.util.*;
-
-import CodeTest.Book;
-import CodeTest.LibraryItem;
-import CodeTest.Magazine;
+import CodeTest.*;
 
 
 public class LegacyLibraryAdapter {
