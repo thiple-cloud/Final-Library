@@ -1,0 +1,265 @@
+@startuml
+
+' === Models Package ===
+package "models" <<Folder>> {
+    ' Abstract class representing a generic library item
+    abstract class LibraryItem <<Abstract>> {
+        - title : String
+        - author : String
+        - publicationYear : int
+        --
+        + getTitle() : String
+        + getAuthor() : String
+        + getPublicationYear() : int
+        + getDetails() : String
+    }
+
+    ' Class representing a book
+    class Book {
+        - isbn : String
+        --
+        + getDetails() : String
+    }
+
+    ' Class representing a magazine
+    class Magazine {
+        - issueNumber : int
+        --
+        + getDetails() : String
+    }
+
+    ' Class representing a user of the library system
+    class User {
+        - name : String
+        - role : String
+        --
+        + getName() : String
+        + getRole() : String
+    }
+
+    ' Inheritance relationships
+    LibraryItem <|-- Book
+    LibraryItem <|-- Magazine
+}
+
+' === Creational Package ===
+' Singleton pattern
+package "creational" <<Folder>> {
+    ' SingletonLibrary class
+    class SingletonLibrary <<Singleton>> {
+        - instance : SingletonLibrary <<static>>
+        - items : List<LibraryItem>
+        --
+        + getInstance() : SingletonLibrary <<static>>
+        + addItem(item : LibraryItem) : void
+        + removeItem(item : LibraryItem) : void
+        + getItems() : List<LibraryItem>
+        --
+        - loadLegacyItems() : void
+    }
+
+    ' Note
+    note top of SingletonLibrary
+        <b>SingletonLibrary</b> ensures only one instance exists and integrates legacy items.
+    end note
+}
+
+' SingletonLibrary relationships
+SingletonLibrary o-- "items" LibraryItem
+
+note on link
+    <b>Usage:</b> SingletonLibrary manages a collection of LibraryItems, including those adapted from legacy items.
+end note
+
+' === Structural Package ===
+' Adapter and Composite patterns
+package "structural" <<Folder>> {
+    ' Adapter pattern
+    package "AdapterPattern" <<Folder>> {
+        ' LegacyItem class
+        class LegacyItem {
+            - legacyTitle : String
+            - legacyCreator : String
+            - legacyYear : int
+            --
+            + getLegacyTitle() : String
+            + getLegacyCreator() : String
+            + getLegacyYear() : int
+        }
+        note right of LegacyItem
+            <b>LegacyItem</b> represents items from a CSV file with a different interface.
+        end note
+
+        ' CSVReader class
+        class CSVReader {
+            --
+            + readCSV(filePath : String) : List<LegacyItem>
+        }
+        note top of CSVReader
+            <b>CSVReader</b> reads legacy data from a CSV file and creates <b>LegacyItem</b> instances.
+        end note
+        ' CSVReader relationships
+        class LegacyItemAdapter {
+            - legacyItem : LegacyItem
+            --
+            + getTitle() : String
+            + getAuthor() : String
+            + getPublicationYear() : int
+            + getDetails() : String
+        }
+        note left of LegacyItemAdapter
+            <b>LegacyItemAdapter</b> adapts a <b>LegacyItem</b> to be used as a <b>LibraryItem</b>.
+        end note
+
+        ' Implementation and relationships
+        LegacyItemAdapter ..|> LibraryItem
+        LegacyItemAdapter o-- LegacyItem
+        note on link
+            <b>Association:</b> The adapter holds a reference to the legacy item.
+        end note
+    }
+
+    ' Composite pattern
+    package "CompositePattern" <<Folder>> {
+        ' LibraryComposite class
+        class LibraryComposite {
+            - items : List<LibraryItem>
+            --
+            + addItem(item : LibraryItem) : void
+            + removeItem(item : LibraryItem) : void
+            + getDetails() : String
+        }
+        note left of LibraryComposite
+            <b>LibraryComposite</b> allows grouping of LibraryItems into a tree structure.
+        end note
+
+        ' Inheritance and aggregation relationships
+        LibraryItem <|-- LibraryComposite
+        LibraryComposite o-- LibraryItem
+        note on link
+            <b>Composite:</b> LibraryComposite can contain multiple LibraryItems.
+        end note
+    }
+}
+
+' === Behavioral Package ===
+package "behavioral" <<Folder>> {
+    package "ObserverPattern" <<Folder>> {
+        interface Subject {
+            + registerObserver(observer : Observer) : void
+            + removeObserver(observer : Observer) : void
+            + notifyObservers() : void
+        }
+        note top of Subject
+            <b>Subject</b> maintains a list of observers and notifies them of changes.
+        end note
+
+        interface Observer {
+            + update() : void
+        }
+        note top of Observer
+            <b>Observer</b> defines an updating interface for objects that should be notified.
+        end note
+
+        class Library {
+            - observers : List<Observer>
+            --
+            + registerObserver(observer : Observer) : void
+            + removeObserver(observer : Observer) : void
+            + notifyObservers() : void
+            + addItem(item : LibraryItem) : void
+            + removeItem(item : LibraryItem) : void
+        }
+        note left of Library
+            <b>Library</b> implements <b>Subject</b> and notifies observers of changes.
+        end note
+
+        class UserObserver {
+            - name : String
+            --
+            + update() : void
+        }
+        note right of UserObserver
+            <b>UserObserver</b> implements <b>Observer</b> and receives updates from the Library.
+        end note
+
+        Library ..|> Subject
+        UserObserver ..|> Observer
+        Library o-- Observer
+        note on link
+            <b>Association:</b> Library maintains a list of Observers.
+        end note
+    }
+
+    package "StrategyPattern" <<Folder>> {
+        interface SearchStrategy {
+            + search(query : String) : List<LibraryItem>
+        }
+        note top of SearchStrategy
+            <b>SearchStrategy</b> defines an interface for search algorithms.
+        end note
+
+        class TitleSearchStrategy {
+            + search(query : String) : List<LibraryItem>
+        }
+        note left of TitleSearchStrategy
+            Searches LibraryItems by <i>title</i>.
+        end note
+
+        class AuthorSearchStrategy {
+            + search(query : String) : List<LibraryItem>
+        }
+        note right of AuthorSearchStrategy
+            Searches LibraryItems by <i>author</i>.
+        end note
+
+        TitleSearchStrategy ..|> SearchStrategy
+        AuthorSearchStrategy ..|> SearchStrategy
+
+        class ItemSearcher {
+            - strategy : SearchStrategy
+            --
+            + setStrategy(strategy : SearchStrategy) : void
+            + search(query : String) : List<LibraryItem>
+        }
+        note bottom of ItemSearcher
+            <b>ItemSearcher</b> uses a <b>SearchStrategy</b> to perform searches.
+        end note
+
+        ItemSearcher o-- SearchStrategy
+        note on link
+            <b>Association:</b> ItemSearcher maintains a reference to a SearchStrategy.
+        end note
+    }
+}
+
+' === Services Package ===
+package "services" <<Folder>> {
+    class ItemReserver {
+        --
+        + reserveItem(item : LibraryItem, user : User) : void
+        + returnItem(item : LibraryItem, user : User) : void
+    }
+    note bottom of ItemReserver
+        <b>ItemReserver</b> handles the reservation and return of Borrowable items.
+    end note
+
+    ItemReserver ..> Borrowable : uses
+}
+
+' === Main Package ===
+package "main" <<Folder>> {
+    class LibraryManagementSystem {
+        --
+        + main(args : String[]) : void
+    }
+    note bottom of LibraryManagementSystem
+        <b>LibraryManagementSystem</b> initializes and coordinates system components.
+    end note
+
+    LibraryManagementSystem ..> SingletonLibrary : uses
+    LibraryManagementSystem ..> ItemSearcher : uses
+    LibraryManagementSystem ..> ItemReserver : uses
+}
+
+@enduml
