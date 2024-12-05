@@ -35,29 +35,29 @@ public class SingletonLibraryDC {
         return instance;
     }
 
-//     /**
-//      * Adds a LibraryItem to the library's collection.
-//      * 
-//      * @param item LibraryItem to add
-//      */
+    /**
+     * Adds a LibraryItem to the library's collection.
+     * 
+     * @param item LibraryItem to add
+     */
      public void addItem(LibraryItem item) {
         items.add(item);
     }
 
-//     /**
-//      * Removes a LibraryItem from the library's collection.
-//      * 
-//      * @param item LibraryItem to remove
-//      */
+    /**
+     * Removes a LibraryItem from the library's collection.
+     * 
+     * @param item LibraryItem to remove
+     */
      public void removeItem(LibraryItem item) {
          items.remove(item);
      }
 
-//     /**
-//      * Retrieves the list of all LibraryItems in the library.
-//      * 
-//      * @return List of LibraryItem
-//      */
+    /**
+     * Retrieves the list of all LibraryItems in the library.
+     * 
+     * @return List of LibraryItem
+     */
      public List<LibraryItem> getItems() {
          return items;
      }
