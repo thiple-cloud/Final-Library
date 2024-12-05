@@ -15,7 +15,7 @@ public class Library {
      * Constructs a new Library with an empty list of items.
      */
     public Library() {
-        items = new ArrayList<>();
+        items = new ArrayList<LibraryItem>();
     }
 
     /**
