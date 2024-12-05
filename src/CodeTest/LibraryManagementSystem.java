@@ -31,23 +31,23 @@ public class LibraryManagementSystem {
         initializeLibraryItems(library);
         
         Map<String, UserRole> userRoles = initializeRolesAndPermissions();
-        //@thiple-cloud add composite
+     
         // Initialize users
         Map<String, User> users = initializeUsers(userRoles);
-         //@thiple-cloud add composite
+      
 
         // Create a scanner for user input
         Scanner scanner = new Scanner(System.in);
 
         // User login
         User currentUser = userLogin(scanner, users);
-        //@Sellfunnel add singleton code here
+       
         // If login failed, exit the program
         if (currentUser == null) {
             scanner.close();
             return;
         }
-         //@Sellfunnel add singleton code here
+        
 
 
         // Main interaction loop
