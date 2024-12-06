@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"AdaptivePattern"},{"l":"All Packages","u":"allpackages-index.html"},{"l":"CodeTest"},{"l":"CompositePattern"},{"l":"creational"},{"l":"observer"},{"l":"strategyPattern"}];updateSearchResults();
